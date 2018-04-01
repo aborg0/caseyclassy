@@ -16,7 +16,7 @@ before_cache:
 language: scala
 jdk:
   - oraclejdk8
-  - openjdk10
+  - oraclejdk9
 scala:
   - 2.12.4
 notifications:
@@ -27,7 +27,7 @@ notifications:
 #    on_failure: always  # options: [always|never|change] default: always
 #    on_start: false     # default: false
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION clean doc coverage test caseyclassyJVM/tut coverageReport &&
+  - sbt ++$TRAVIS_SCALA_VERSION clean doc coverage test tut coverageReport &&
     sbt coverageAggregate
 after_success:
   - sbt coveralls
