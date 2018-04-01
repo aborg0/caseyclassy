@@ -16,7 +16,7 @@ before_cache:
 language: scala
 jdk:
   - oraclejdk8
-  - oraclejdk9
+  - openjdk10
 scala:
   - 2.12.4
 notifications:

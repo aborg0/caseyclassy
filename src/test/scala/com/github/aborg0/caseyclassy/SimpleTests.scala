@@ -3,13 +3,14 @@ package com.github.aborg0.caseyclassy
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.FlatSpec
-import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2, Tables}
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 
 class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
   val implementations = Table("implementation", RegexParseCaseClass)
 
   behavior of "ParseCaseClass for simple cases"
 
+  import RegexParseCaseClass._
   it should "parse SimpleDouble" in {
     val simpleDoubleInputs: TableFor2[ParseCaseClass, SimpleDouble] = Table(
       ("implementation", "SimpleDouble"),
