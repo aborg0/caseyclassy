@@ -3,6 +3,7 @@ package com.github.aborg0.caseyclassy
 import java.time.{LocalDate, LocalTime}
 
 import scala.reflect.runtime.universe._
+import scala.util.Try
 
 import shapeless._
 
@@ -39,14 +40,19 @@ case object RegexParseCaseClass extends ParseCaseClass {
   }
 
   implicit def parseHNil: Parse[HNil] = input => if (input.isEmpty) HNil else throw new IllegalArgumentException(s"Non-empty: |$input|")
+  implicit def parseCNil: Parse[CNil] = input => throw new IllegalStateException(input)
 
-  implicit def parseH[Head, Tail <: HList](implicit headParse: Lazy[Parse[Head]], tailParse: Lazy[Parse[Tail]]): Parse[Head :: Tail] = input => {
+  implicit def parseProduct[Head, Tail <: HList](implicit headParse: Lazy[Parse[Head]], tailParse: Lazy[Parse[Tail]]): Parse[Head :: Tail] = input => {
     val head = headParse.value.parse(input)
     head :: tailParse.value.parse(input.substring(head.toString.length))
   }
 
+  implicit def parseCoproduct[Head, Tail <: Coproduct](implicit headParse: Lazy[Parse[Head]], tailParse: Lazy[Parse[Tail]]): Parse[Head :+: Tail] = input => {
+    /*case Inl(h) =>*/ Try(Inl(headParse.value.parse(input))).getOrElse{/*case Inr(t) => */Inr(tailParse.value.parse(input))}
+  }
+
   implicit def generic[A: TypeTag, R](implicit gen: Generic.Aux[A, R], parse: Parse[R]): Parse[A] = input => {
-    val typeKind = the[TypeTag[A]]
+    val typeKind = implicitly[TypeTag[A]]
     import scala.reflect.runtime.universe._
     if (typeKind.tpe <:< typeTag[AnyVal].tpe || typeKind.tpe <:< typeTag[String].tpe || typeKind.tpe <:< typeTag[LocalDate].tpe || typeKind.tpe <:< typeTag[LocalTime].tpe) {
       gen.from(parse.parse(input))
@@ -55,7 +61,8 @@ case object RegexParseCaseClass extends ParseCaseClass {
       val rest = if (input.length > name.length + 1) input.substring(name.length + 1, input.length - 1) else ""
       gen.from(parse.parse(rest))
     } else {
-      throw new IllegalArgumentException(s"|$input| does not start with ${typeKind.tpe.typeSymbol.name.toString}")
+      gen.from(parse.parse(input))
+//      throw new IllegalArgumentException(s"|$input| does not start with ${typeKind.tpe.typeSymbol.name.toString}")
     }
   }
 }
