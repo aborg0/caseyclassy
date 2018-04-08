@@ -65,7 +65,7 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
                                                             impl <- implementations} yield impl -> either): _*)
     forAll(options) { (impl, input) => assert(impl.to[Either[LocalDate, Float]](input.toString) === input) }
   }
-  it should "parse Tuple1s" in {
+  it should "parse Tuple1s" ignore {
     val options = Table(("implementation", "tuple1"), (for {tup1 <- Seq(Tuple1(Some(2)), Tuple1(None))
                                                             impl <- implementations} yield impl -> tup1): _*)
     forAll(options) { (impl, input) => assert(impl.to[Tuple1[Option[Int]]](input.toString) === input) }

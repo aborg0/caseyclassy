@@ -7,5 +7,5 @@ trait ParseCaseClass {
 }
 
 trait Parse[A] {
-  def parse(inupt: String): A
+  def parse(input: String): A
 }
