@@ -95,12 +95,11 @@ private[caseyclassy] trait GenericImplementations {
       import scala.reflect.runtime.universe._
       if (typeKind.tpe <:< typeTag[AnyVal].tpe || typeKind.tpe <:< typeTag[String].tpe || typeKind.tpe <:< typeTag[LocalDate].tpe || typeKind.tpe <:< typeTag[LocalTime].tpe) {
         s"(${toNonCapturing(argParse.pattern.pattern.pattern)})".r
-      } else /*if (input.startsWith(typeKind.tpe.typeSymbol.name.toString)) */{
+      } else if (typeKind.tpe.typeSymbol.isAbstract /*approximation of sealed base*/) {
+        toNonCapturing(argParse.pattern.pattern.pattern).r
+      } else {
         val name = typeKind.tpe.typeSymbol.name.toString
-
-        /*if (input.length > name.length + 1) */s"(?:$name)(?:\\()?(${toNonCapturing(argParse.pattern.pattern.pattern)})(?:\\))?".r //else s"($name)".r
-//      } else {
-//        s"(${toNonCapturing(argParse.pattern.pattern.pattern)})".r
+        s"(?:$name)(?:\\()?(${toNonCapturing(argParse.pattern.pattern.pattern)})(?:\\))?".r
       }
     }
 
@@ -122,7 +121,7 @@ private[caseyclassy] trait GenericImplementations {
         } else {
           gen.from(argParse.parse(input))
         }
-      } else if (Set("Option", "Either", "Tuple1").contains(typeKind.tpe.typeSymbol.name.toString)){
+      } else if (typeKind.tpe.typeSymbol.isAbstract/*approximation of sealed base*/){
         // fall back for base sealed structure
         gen.from(argParse.parse(input))
       } else
