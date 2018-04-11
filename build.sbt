@@ -47,15 +47,15 @@ val sharedSettings = Seq(
     "-Ywarn-nullary-unit", // Warn when nullary methods return Unit.
     "-Ywarn-numeric-widen", // Warn when numerics are widened.
     "-Ywarn-unused:implicits", // Warn if an implicit parameter is unused.
-    "-Ywarn-unused:imports", // Warn if an import selector is not referenced.
+    //"-Ywarn-unused:imports", // Warn if an import selector is not referenced.
     "-Ywarn-unused:locals", // Warn if a local definition is unused.
-    "-Ywarn-unused:params", // Warn if a value parameter is unused.
+    //"-Ywarn-unused:params", // Warn if a value parameter is unused.
     "-Ywarn-unused:patvars", // Warn if a variable bound in a pattern is unused.
     "-Ywarn-unused:privates", // Warn if a private member is unused.
     "-Ywarn-value-discard" // Warn when non-Unit expression results are unused.
   ),
-  scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports",
-                                              "-Xfatal-warnings")
+  scalacOptions in(Compile, console) --= Seq("-Ywarn-unused:imports",
+    "-Xfatal-warnings")
 )
 
 name := "caseyclassy"
@@ -74,17 +74,23 @@ scalafmtCheck := true
 
 lazy val caseyClassy =
 // (6) select supported platforms
-  crossProject(JSPlatform, JVMPlatform /*, NativePlatform*/ )
+  crossProject(JSPlatform, JVMPlatform /*, NativePlatform*/)
     .withoutSuffixFor(JVMPlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
-    .jsSettings( /* ... */ ) // defined in sbt-scalajs-crossproject
-    .jvmSettings( /* ... */ )
+    .jsSettings(/* ... */) // defined in sbt-scalajs-crossproject
+    .jvmSettings(
+    osgiSettings,
+    libraryDependencies += "org.osgi" % "org.osgi.core" % "4.3.0" % "provided",
+    OsgiKeys.bundleSymbolicName := "com.github.aborg0.caseyclassy",
+    OsgiKeys.exportPackage := Seq("com.github.aborg0.caseyclassy"),
+    /* ... */)
 // (7) configure Scala-Native settings
 //    .nativeSettings(/* ... */) // defined in sbt-scala-native
 
 lazy val caseyClassyJS = caseyClassy.js
-lazy val caseyClassyJVM = caseyClassy.jvm
+lazy val caseyClassyJVM = caseyClassy.jvm.enablePlugins(SbtOsgi)
+
 //lazy val caseyClassyNative = caseyClassy.native
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
