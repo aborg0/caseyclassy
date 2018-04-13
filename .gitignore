@@ -126,6 +126,7 @@ fabric.properties
 # Other
 *.class
 *.log
+.coveralls.yml
 
 # Swap
 [._]*.s[a-v][a-z]

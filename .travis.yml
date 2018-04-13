@@ -27,6 +27,7 @@ notifications:
 #    on_failure: always  # options: [always|never|change] default: always
 #    on_start: false     # default: false
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION clean doc coverage test tut
+  - sbt ++$TRAVIS_SCALA_VERSION clean doc tut coverage test coverageReport &&
+    sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 after_success:
-  - sbt coverageReport coveralls
+  - sbt ++$TRAVIS_SCALA_VERSION coveralls
