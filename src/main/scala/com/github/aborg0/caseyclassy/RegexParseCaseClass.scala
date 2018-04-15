@@ -2,11 +2,11 @@ package com.github.aborg0.caseyclassy
 
 import java.time.{LocalDate, LocalTime}
 
-import scala.reflect.runtime.universe._
-import scala.util.{Failure, Try}
 import shapeless._
 
 import scala.collection.mutable.ArrayBuffer
+import scala.reflect.runtime.universe._
+import scala.util.Try
 import scala.util.matching.Regex
 
 private[caseyclassy] trait GenericImplementations {
@@ -34,10 +34,7 @@ private[caseyclassy] trait GenericImplementations {
     protected[caseyclassy] override val pattern: Regex = "(true|false)".r
 
     override def toResult(found: String): Boolean = found.toBoolean
-
-    //override def parse(input: String): Boolean = input.toBoolean
   }
-
 
   implicit def parseHNil: RegexParse[HNil] = new CommonRegexParse[HNil] {
     protected[caseyclassy] override val pattern: Regex = "()".r
@@ -45,9 +42,7 @@ private[caseyclassy] trait GenericImplementations {
     override def toResult(found: String): HNil = if (found.isEmpty) HNil else throw new IllegalArgumentException(s"Non-empty: |$found|")
   }
 
-  implicit def parseCNil: RegexParse[CNil] = new CommonRegexParse[CNil] {
-    override def toResult(found: String): CNil = ???
-
+  implicit def parseCNil: RegexParse[CNil] = new CommonRegexParseWithoutToResult[CNil] {
     override def parse(input: String): CNil = throw new IllegalStateException(input)
 
     override protected[caseyclassy] val pattern: Regex = "".r
@@ -68,7 +63,6 @@ private[caseyclassy] trait GenericImplementations {
       val headLength = head.toString.length
       head :: tailParse.value.parse(if (input.length > headLength) input.substring(headLength + 1) else "")
     }
-
   }
 
   implicit def parseCoproduct[Head, Tail <: Coproduct](implicit headParse: Lazy[RegexParse[Head]], tailParse: Lazy[RegexParse[Tail]]): RegexParse[Head :+: Tail] = new CommonRegexParseWithoutToResult[Head :+: Tail] {
@@ -86,17 +80,14 @@ private[caseyclassy] trait GenericImplementations {
         Inr(tailParse.value.parse(input))
       }
     }
-
   }
-
 
   implicit def generic[A: TypeTag, R](implicit gen: Generic.Aux[A, R], argParse: RegexParse[R]): RegexParse[A] = new CommonRegexParseWithoutToResult[A] {
     protected[caseyclassy] override val pattern: Regex = {
       val typeKind = implicitly[TypeTag[A]]
-      import scala.reflect.runtime.universe._
       /*if (typeKind.tpe <:< typeTag[AnyVal].tpe || typeKind.tpe <:< typeTag[String].tpe || typeKind.tpe <:< typeTag[LocalDate].tpe || typeKind.tpe <:< typeTag[LocalTime].tpe) {
         s"(${toNonCapturing(argParse.pattern.pattern.pattern)})".r
-      } else */if (typeKind.tpe.typeSymbol.isAbstract /*approximation of sealed base*/ ) {
+      } else */ if (typeKind.tpe.typeSymbol.isAbstract /*approximation of sealed base*/ ) {
         toNonCapturing(argParse.pattern.pattern.pattern).r
       } else {
         val name = typeKind.tpe.typeSymbol.name.toString
@@ -109,7 +100,6 @@ private[caseyclassy] trait GenericImplementations {
 
     override def parse(input: String): A = {
       val typeKind = implicitly[TypeTag[A]]
-      import scala.reflect.runtime.universe._
       /*if (typeKind.tpe <:< typeTag[AnyVal].tpe || typeKind.tpe <:< typeTag[String].tpe || typeKind.tpe <:< typeTag[LocalDate].tpe || typeKind.tpe <:< typeTag[LocalTime].tpe) {
         gen.from(argParse.parse(input))
       } else*/ if (pattern.findPrefixOf(input).isDefined /*input.startsWith(typeKind.tpe.typeSymbol.name.toString)*/ ) {
@@ -158,8 +148,9 @@ case object RegexParseCaseClass extends ParseCaseClass with GenericImplementatio
     override protected[caseyclassy] val pattern: Regex = "(\\d{4}\\-\\d{2}\\-\\d{2})".r
   }
 
+  implicit def seqConverter[A](implicit parseA: RegexParse[A]): CommonRegexParse[Seq[A]] = new CommonRegexParseWithoutToResult[Seq[A]] {
+    override protected[caseyclassy] val pattern: Regex = s"(?:WrappedArray|List|Vector)\\(((?:(?:${toNonCapturing(parseA.pattern.pattern.pattern)})(?:, )?)*)\\)".r
 
-  implicit def seqConverter[A](implicit parseA: RegexParse[A]): CommonRegexParse[Seq[A]] = new CommonRegexParse[Seq[A]] {
     override def parse(input: String): Seq[A] = pattern.findPrefixMatchOf(input).fold(throw new IllegalArgumentException(s"$input does not start with a Seq"))(m => {
       val all = m.group(1)
       val buffer = new ArrayBuffer[A]()
@@ -174,19 +165,7 @@ case object RegexParseCaseClass extends ParseCaseClass with GenericImplementatio
       }
       buffer.toVector
     })
-
-    override protected[caseyclassy] val pattern: Regex = s"(?:WrappedArray|List|Vector)\\(((?:(?:${toNonCapturing(parseA.pattern.pattern.pattern)})(?:, )?)*)\\)".r
-
-    override def toResult(found: String): Seq[A] = ???
   }
-
-  //  implicit def tuple1Parse[A](implicit argParse: RegexParse[A]): CommonRegexParse[Tuple1[A]] = new CommonRegexParse[Tuple1[A]] {
-  //    protected[caseyclassy] override val pattern: Regex = s"\\((${toNonCapturing(argParse.pattern.pattern.pattern)})\\)".r
-  //
-  //    override def toResult(found: String): Tuple1[A] = Tuple1(argParse.parse(found))
-  //
-  //    //    override def parse(input: String): Tuple1[A] = Tuple1(argParse.parse(input.substring(1, input.length - 1)))
-  //  }
 
   //endregion
 
@@ -207,5 +186,6 @@ trait CommonRegexParse[A] extends RegexParse[A] {
 }
 
 trait CommonRegexParseWithoutToResult[A] extends CommonRegexParse[A] {
-  final def toResult(found: String): A = ???
+  final def toResult(found: String): A =
+    throw new IllegalStateException("Should not be called, consider CommonRegexParse base instead")
 }

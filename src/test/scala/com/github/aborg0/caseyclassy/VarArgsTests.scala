@@ -2,10 +2,10 @@ package com.github.aborg0.caseyclassy
 
 import com.github.aborg0.caseyclassy.example.{OnlyVarArgs, StringPlusVarArgs}
 import org.scalatest.WordSpec
-import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
 class VarArgsTests extends WordSpec with TableDrivenPropertyChecks {
-  val implementations = Table("implementation", RegexParseCaseClass)
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
 
   import RegexParseCaseClass._
 

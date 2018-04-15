@@ -5,10 +5,10 @@ import java.time.{LocalDate, LocalTime}
 import com.github.aborg0.caseyclassy.example.TwoArgsBoolInt
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.FlatSpec
-import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
 class TwoArgsTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations = Table("implementation", RegexParseCaseClass)
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
 
   behavior of "ParseCaseClass for two args cases"
 

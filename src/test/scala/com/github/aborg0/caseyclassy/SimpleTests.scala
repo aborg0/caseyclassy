@@ -5,10 +5,10 @@ import java.time.LocalDate
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
 import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.FlatSpec
-import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
 class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations = Table("implementation", RegexParseCaseClass)
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
 
   behavior of "ParseCaseClass for simple cases"
 
