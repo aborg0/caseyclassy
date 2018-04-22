@@ -18,6 +18,14 @@ It might possible to parse simple values, like `Boolean`, `Byte`, `Short`, `Int`
 val date: LocalDate = RegexParseCaseClass.to[LocalDate]("2018-04-01")
 ```
 
+or it is also possible to create a parser and reuse it:
+
+```tut
+val dateParser = RegexParseCaseClass[LocalDate]
+dateParser.parse("2018-04-01")
+dateParser.parse("2018-04-22")
+```
+
 Tuple2 of `String` and `Int`:
 
 ```tut

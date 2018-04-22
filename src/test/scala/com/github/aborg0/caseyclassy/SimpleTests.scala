@@ -70,4 +70,10 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
                                                             impl <- implementations} yield impl -> tup1): _*)
     forAll(options) { (impl, input) => assert(impl.to[Tuple1[Option[Int]]](input.toString) === input) }
   }
+
+  "RegexParseCaseClass" should "support reuse" in {
+    val simpleBooleanParser = RegexParseCaseClass[SimpleBoolean]
+    assert(simpleBooleanParser.parse("SimpleBoolean(false)") === SimpleBoolean(false))
+    assert(simpleBooleanParser.parse("SimpleBoolean(true)") === SimpleBoolean(true))
+  }
 }
