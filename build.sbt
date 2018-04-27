@@ -5,7 +5,7 @@ enablePlugins(TutPlugin)
 enablePlugins(LaikaPlugin)
 
 val sharedSettings = Seq(
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.6",
   scalacOptions ++= Seq( // from: https://tpolecat.github.io/2017/04/25/scalac-flags.html
     "-deprecation", // Emit warning and location for usages of deprecated APIs.
     "-encoding",
@@ -64,7 +64,7 @@ organization := "com.github.aborg0"
 
 version := "0.1"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.6"
 
 startYear := Some(2018)
 
