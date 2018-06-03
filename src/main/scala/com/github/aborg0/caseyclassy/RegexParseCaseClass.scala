@@ -126,7 +126,7 @@ private[caseyclassy] trait GenericImplementations {
 
 case object RegexParseCaseClass extends ParseCaseClass with GenericImplementations {
 
-  override def to[A <: AnyRef](input: String)(implicit parse: Lazy[Parse[A]]): A = {
+  override def to[A/* <: AnyRef*/](input: String)(implicit parse: Lazy[Parse[A]]): A = {
     parse.value.parse(input)
   }
 
