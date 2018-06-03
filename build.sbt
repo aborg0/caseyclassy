@@ -54,8 +54,7 @@ val sharedSettings = Seq(
     "-Ywarn-unused:privates", // Warn if a private member is unused.
     "-Ywarn-value-discard" // Warn when non-Unit expression results are unused.
   ),
-  scalacOptions in(Compile, console) --= Seq("-Ywarn-unused:imports",
-    "-Xfatal-warnings")
+  scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
 )
 
 name := "caseyclassy"
@@ -102,5 +101,5 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.chuusai" %% "shapeless" % "2.3.3"
+  "com.chuusai" %%% "shapeless" % "2.3.3"
 )
