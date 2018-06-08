@@ -3,16 +3,14 @@ package com.github.aborg0.caseyclassy
 import java.time.LocalDate
 
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
-import org.scalactic.TypeCheckedTripleEquals
 import org.scalatest.FlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
+class PCSimpleTests extends FlatSpec with TableDrivenPropertyChecks {
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", ParserCombinatorParseCaseClass)
 
-  behavior of "ParseCaseClass for simple cases"
-
-  import RegexParseCaseClass._
+  behavior of "FastParseParseCaseClass for simple cases"
+  import ParserCombinatorParseCaseClass._
 
   it should "parse SimpleDouble" in {
     val simpleDoubleInputs: TableFor2[ParseCaseClass, SimpleDouble] = Table(
@@ -41,6 +39,16 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
     )
     forAll(simpleIntInputs) { (impl: ParseCaseClass, input: SimpleInt) =>
       assert(impl.to[SimpleInt](input.toString) === input)
+    }
+  }
+  it should "parse Int" in {
+    val simpleIntInputs: TableFor2[ParseCaseClass, Int] = Table(
+      ("implementation", "Int"),
+      Seq(1, 0, 2, -5, -10, Int.MaxValue, Int.MinValue).flatMap(i =>
+        implementations.map(impl => impl -> i)): _*
+    )
+    forAll(simpleIntInputs) { (impl: ParseCaseClass, input: Int) =>
+      assert(impl.to[Int](input.toString) === input)
     }
   }
   it should "parse SimpleBoolean" in {
@@ -72,8 +80,8 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
     forAll(options) { (impl, input) => assert(impl.to[Tuple1[Option[Int]]](input.toString) === input) }
   }
 
-  "RegexParseCaseClass" should "support reuse" in {
-    val simpleBooleanParser = RegexParseCaseClass[SimpleBoolean]
+  "FastParseParseCaseClass" should "support reuse" in {
+    val simpleBooleanParser = ParserCombinatorParseCaseClass[SimpleBoolean]
     assert(simpleBooleanParser.parse("SimpleBoolean(false)") === SimpleBoolean(false))
     assert(simpleBooleanParser.parse("SimpleBoolean(true)") === SimpleBoolean(true))
   }

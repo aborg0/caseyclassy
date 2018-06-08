@@ -103,3 +103,5 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "com.chuusai" %%% "shapeless" % "2.3.3"
 )
+
+libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.0"
