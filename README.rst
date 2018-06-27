@@ -10,6 +10,13 @@ Aims to parse Scala case classes (default) toString output and convert back to c
 
 **Work in progress!**
 
+----
+
+Check Examples_ and the tests_ for its features.
+
+Please note that when you ``sbt test``, you will need to `install node`_
+
+
 .. |BuildStatus| image:: https://travis-ci.org/aborg0/caseyclassy.svg?branch=master
                     :alt: Build Status
 .. _BuildStatus: https://travis-ci.org/aborg0/caseyclassy
@@ -17,10 +24,7 @@ Aims to parse Scala case classes (default) toString output and convert back to c
                     :alt: Coverage Status
 .. _CoverageStatus: https://coveralls.io/github/aborg0/caseyclassy?branch=master
 
-
-----
-
-Check Examples_ and the tests_ for its features.
-
 .. _Examples: src/main/tut/Examples.md
 .. _tests: src/test/scala/com/github/aborg0/caseyclassy/
+
+.. _install node: https://www.scala-js.org/tutorial/basic/index.html#a-nameprerequisitesa-step-0-prerequisites
