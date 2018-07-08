@@ -1,7 +1,7 @@
 package com.github.aborg0.caseyclassy
 
 import fastparse.all._
-import java.time.{LocalDate, LocalTime}
+import java.time.{LocalDate, LocalDateTime, LocalTime}
 
 import shapeless._
 
@@ -38,7 +38,7 @@ private[caseyclassy] trait FPGenericImplementations {
     () => (headParse.value.parser() ~ ",".? ~ tailParse.value.parser()).map { case (h, t) => h :: t }
 
   implicit def parseCoproduct[Head, Tail <: Coproduct](implicit headParse: Lazy[FastParseParse[Head]],
-                                                                tailParse: Lazy[FastParseParse[Tail]]): FastParseParse[Head :+: Tail] =
+                                                       tailParse: Lazy[FastParseParse[Tail]]): FastParseParse[Head :+: Tail] =
     () => headParse.value.parser().map(Inl(_)) | tailParse.value.parser().map(Inr(_))
 
   implicit def generic[A: TypeTag, R](implicit gen: Generic.Aux[A, R], argParse: FastParseParse[R]): FastParseParse[A] = () => {
@@ -48,7 +48,7 @@ private[caseyclassy] trait FPGenericImplementations {
       if (name.startsWith("Tuple"))
         P("(" ~/ argParse.parser() ~ ")").map(gen.from)
       else
-        P(name ~ (("(" ~/ argParse.parser() ~ ")") | argParse.parser())).map(gen.from)
+        P(name.? ~ (("(" ~/ argParse.parser() ~ ")") | argParse.parser())).map(gen.from)
     }
   }
 }
@@ -76,8 +76,13 @@ case object FastParseParseCaseClass extends ParseCaseClass with FPGenericImpleme
       CharIn('0' to '9').rep(1, "", 2) ~ "-" ~
       CharIn('0' to '9').rep(1, "", 2)).!.map(LocalDate.parse(_))
 
+  implicit def localDateTimeParse: FastParseParse[LocalDateTime] = () =>
+    (dateParse.parser() ~ "T" ~ timeParse.parser()) map { case (d, t) => LocalDateTime.of(d, t) }
+
   implicit def seqConverter[A](implicit parseA: FastParseParse[A]): FastParseParse[Seq[A]] = () =>
-    P(("WrappedArray" | "List" | "Vector") ~ "(" ~/ parseA.parser().rep(sep = ", ") ~ ")")
+    P(("WrappedArray" | "List" | "Vector") ~ "(" ~/ parseA.parser().rep(sep = ", ") ~ ")") |
+      P("[" ~/ parseA.parser().rep(sep=", ") ~ "]")
+
   //endregion
 }
 

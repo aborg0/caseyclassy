@@ -182,3 +182,22 @@ FastParseParseCaseClass.to[Option[Option[Int]]]("None")
 FastParseParseCaseClass.to[Option[Either[String, Seq[Boolean]]]]("Some(Right(List()))")
 FastParseParseCaseClass.to[Option[Either[String, Seq[Boolean]]]]("Some(Right(List(false, true)))")
 ```
+
+### Sequences
+
+```tut
+FastParseParseCaseClass.to[Seq[Int]]("[1, 2, 3]")
+```
+
+### Alternative syntax
+
+```tut
+FastParseParseCaseClass.to[Example]("(1,Hello world)")
+```
+
+```tut
+FastParseParseCaseClass.to[java.time.LocalDateTime]("2018-06-22T23:01:26.544223200")
+FastParseParseCaseClass.to[java.time.LocalDateTime]("2018-06-22T23:01:26.544")
+FastParseParseCaseClass.to[java.time.LocalDateTime]("2018-06-22T23:01:26")
+FastParseParseCaseClass.to[java.time.LocalDateTime]("2018-06-22T23:01")
+```
