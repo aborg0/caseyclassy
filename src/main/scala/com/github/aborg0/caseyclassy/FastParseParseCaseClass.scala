@@ -48,7 +48,7 @@ private[caseyclassy] trait FPGenericImplementations {
       if (name.startsWith("Tuple"))
         P("(" ~/ argParse.parser() ~ ")").map(gen.from)
       else
-        P(name.? ~ (("(" ~/ argParse.parser() ~ ")") | argParse.parser())).map(gen.from)
+        P((name.? ~ ("(" ~ argParse.parser() ~ ")")) | (name ~ argParse.parser())).map(gen.from)
     }
   }
 }
