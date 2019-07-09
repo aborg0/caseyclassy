@@ -149,7 +149,7 @@ case object RegexParseCaseClass extends ParseCaseClass with GenericImplementatio
   }
 
   implicit def seqConverter[A](implicit parseA: RegexParse[A]): CommonRegexParse[Seq[A]] = new CommonRegexParseWithoutToResult[Seq[A]] {
-    override protected[caseyclassy] val pattern: Regex = s"(?:WrappedArray|List|Vector)\\(((?:(?:${toNonCapturing(parseA.pattern.pattern.pattern)})(?:, )?)*)\\)".r
+    override protected[caseyclassy] val pattern: Regex = s"(?:WrappedArray|ArraySeq|List|Vector)\\(((?:(?:${toNonCapturing(parseA.pattern.pattern.pattern)})(?:, )?)*)\\)".r
 
     override def parse(input: String): Seq[A] = pattern.findPrefixMatchOf(input).fold(throw new IllegalArgumentException(s"$input does not start with a Seq"))(m => {
       val all = m.group(1)
