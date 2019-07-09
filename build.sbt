@@ -6,6 +6,7 @@ enablePlugins(LaikaPlugin)
 
 val sharedSettings = Seq(
   scalaVersion := "2.12.8",
+  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0"),
   scalacOptions ++= Seq( // from: https://tpolecat.github.io/2017/04/25/scalac-flags.html
     "-deprecation", // Emit warning and location for usages of deprecated APIs.
     "-encoding",
