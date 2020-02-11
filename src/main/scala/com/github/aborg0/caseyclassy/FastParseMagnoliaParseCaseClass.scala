@@ -122,9 +122,9 @@ trait MagnoliaParseCaseClass {
   def to[A /*<: AnyRef*/](input: String)(implicit parse: Parse[A]): A
 }
 
-//trait FastParseParse[A] extends Parse[A] {
-//  protected[caseyclassy] def parser(): Parser[A]
-//
-//  override def parse(input: String): A = parser().parse(input).fold((p, i, e) =>
-//    throw new IllegalArgumentException(s"Expected: $p at position: $i"), (a, i) => a)
-//}
+trait FastParseParse[A] extends Parse[A] {
+  protected[caseyclassy] def parser(): Parser[A]
+
+  override def parse(input: String): A = parser().parse(input).fold((p, i, e) =>
+    throw new IllegalArgumentException(s"Expected: $p at position: $i"), (a, i) => a)
+}

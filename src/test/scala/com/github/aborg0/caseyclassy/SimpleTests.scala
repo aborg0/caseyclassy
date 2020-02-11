@@ -4,18 +4,18 @@ import java.time.LocalDate
 
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
 import org.scalactic.TypeCheckedTripleEquals
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
+class SimpleTests extends AnyFlatSpec with TableDrivenPropertyChecks {
+  val implementations: TableFor1[MagnoliaParseCaseClass] = Table("implementation", FastParseMagnoliaParseCaseClass)
 
   behavior of "ParseCaseClass for simple cases"
 
-  import RegexParseCaseClass._
+  import FastParseMagnoliaParseCaseClass._
 
   it should "parse SimpleDouble" in {
-    val simpleDoubleInputs: TableFor2[ParseCaseClass, SimpleDouble] = Table(
+    val simpleDoubleInputs: TableFor2[MagnoliaParseCaseClass, SimpleDouble] = Table(
       ("implementation", "SimpleDouble"),
       Seq(1d,
         0d,
@@ -29,27 +29,27 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
         Double.PositiveInfinity).flatMap(d =>
         implementations.map(impl => impl -> SimpleDouble(d))): _*
     )
-    forAll(simpleDoubleInputs) { (impl: ParseCaseClass, input: SimpleDouble) =>
+    forAll(simpleDoubleInputs) { (impl: MagnoliaParseCaseClass, input: SimpleDouble) =>
       assert(impl.to[SimpleDouble](input.toString) === input)
     }
   }
   it should "parse SimpleInt" in {
-    val simpleIntInputs: TableFor2[ParseCaseClass, SimpleInt] = Table(
+    val simpleIntInputs: TableFor2[MagnoliaParseCaseClass, SimpleInt] = Table(
       ("implementation", "SimpleInt"),
       Seq(1, 0, 2, -5, -10, Int.MaxValue, Int.MinValue).flatMap(i =>
         implementations.map(impl => impl -> SimpleInt(i))): _*
     )
-    forAll(simpleIntInputs) { (impl: ParseCaseClass, input: SimpleInt) =>
+    forAll(simpleIntInputs) { (impl: MagnoliaParseCaseClass, input: SimpleInt) =>
       assert(impl.to[SimpleInt](input.toString) === input)
     }
   }
   it should "parse SimpleBoolean" in {
-    val simpleIntInputs: TableFor2[ParseCaseClass, SimpleBoolean] = Table(
+    val simpleIntInputs: TableFor2[MagnoliaParseCaseClass, SimpleBoolean] = Table(
       ("implementation", "SimpleBoolean"),
       Seq(false, true).flatMap(b =>
         implementations.map(impl => impl -> SimpleBoolean(b))): _*
     )
-    forAll(simpleIntInputs) { (impl: ParseCaseClass, input: SimpleBoolean) =>
+    forAll(simpleIntInputs) { (impl: MagnoliaParseCaseClass, input: SimpleBoolean) =>
       assert(impl.to[SimpleBoolean](input.toString) === input)
     }
   }
@@ -73,7 +73,7 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
   }
 
   "RegexParseCaseClass" should "support reuse" in {
-    val simpleBooleanParser = RegexParseCaseClass[SimpleBoolean]
+    val simpleBooleanParser = FastParseMagnoliaParseCaseClass[SimpleBoolean]
     assert(simpleBooleanParser.parse("SimpleBoolean(false)") === SimpleBoolean(false))
     assert(simpleBooleanParser.parse("SimpleBoolean(true)") === SimpleBoolean(true))
   }
