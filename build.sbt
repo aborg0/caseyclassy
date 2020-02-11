@@ -1,11 +1,12 @@
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossPlugin.autoImport.crossProject
+//import sbtcrossproject.CrossType
 
 enablePlugins(TutPlugin)
 
 enablePlugins(LaikaPlugin)
 
 val sharedSettings = Seq(
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.13.0",
   scalacOptions ++= Seq( // from: https://tpolecat.github.io/2017/04/25/scalac-flags.html
     "-deprecation", // Emit warning and location for usages of deprecated APIs.
     "-encoding",
@@ -63,7 +64,7 @@ organization := "com.github.aborg0"
 
 version := "0.1"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.13.0"
 
 startYear := Some(2018)
 
@@ -92,8 +93,8 @@ lazy val caseyClassyJVM = caseyClassy.jvm.enablePlugins(SbtOsgi)
 
 //lazy val caseyClassyNative = caseyClassy.native
 
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.1.0"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % "test"
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases"),
@@ -104,4 +105,4 @@ libraryDependencies ++= Seq(
   "com.chuusai" %%% "shapeless" % "2.3.3"
 )
 
-libraryDependencies += "com.lihaoyi" %%% "fastparse" % "1.0.0"
+libraryDependencies += "com.lihaoyi" %%% "fastparse" % "2.2.2"

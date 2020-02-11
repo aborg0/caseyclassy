@@ -4,15 +4,16 @@ import java.time.{LocalDate, LocalTime}
 
 import com.github.aborg0.caseyclassy.example.TwoArgsBoolInt
 import org.scalactic.TypeCheckedTripleEquals
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class TwoArgsTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
+class TwoArgsTests extends AnyFlatSpec with TableDrivenPropertyChecks {
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", FastParseParseCaseClass, RegexParseCaseClass)
 
   behavior of "ParseCaseClass for two args cases"
 
-  import RegexParseCaseClass._
+  import FastParseParseCaseClass._
+//  import RegexParseCaseClass._
   it should "parse Tuple2[Int, LocalDate]" in {
     val intDateInputs: TableFor2[ParseCaseClass, (Int, LocalDate)] = Table(
       ("implementation", "(Int, LocalDate)"),

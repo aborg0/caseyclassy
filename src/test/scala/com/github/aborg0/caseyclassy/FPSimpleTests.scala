@@ -3,14 +3,15 @@ package com.github.aborg0.caseyclassy
 import java.time.LocalDate
 
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class FPSimpleTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations: TableFor1[ParseCaseClass] = Table("implementation", FastParseParseCaseClass)
+class FPSimpleTests extends AnyFlatSpec with TableDrivenPropertyChecks {
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", FastParseParseCaseClass, RegexParseCaseClass)
 
   behavior of "FastParseParseCaseClass for simple cases"
   import FastParseParseCaseClass._
+//  import RegexParseCaseClass._
 
   it should "parse SimpleDouble" in {
     val simpleDoubleInputs: TableFor2[ParseCaseClass, SimpleDouble] = Table(

@@ -4,15 +4,16 @@ import java.time.LocalDate
 
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
 import org.scalactic.TypeCheckedTripleEquals
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
-  val implementations: TableFor1[ParseCaseClass] = Table("implementation", RegexParseCaseClass)
+class SimpleTests extends AnyFlatSpec with TableDrivenPropertyChecks {
+  val implementations: TableFor1[ParseCaseClass] = Table("implementation", FastParseParseCaseClass, RegexParseCaseClass)
 
   behavior of "ParseCaseClass for simple cases"
 
-  import RegexParseCaseClass._
+  import FastParseParseCaseClass._
+//  import RegexParseCaseClass._
 
   it should "parse SimpleDouble" in {
     val simpleDoubleInputs: TableFor2[ParseCaseClass, SimpleDouble] = Table(
@@ -73,7 +74,7 @@ class SimpleTests extends FlatSpec with TableDrivenPropertyChecks {
   }
 
   "RegexParseCaseClass" should "support reuse" in {
-    val simpleBooleanParser = RegexParseCaseClass[SimpleBoolean]
+    val simpleBooleanParser = FastParseParseCaseClass[SimpleBoolean]
     assert(simpleBooleanParser.parse("SimpleBoolean(false)") === SimpleBoolean(false))
     assert(simpleBooleanParser.parse("SimpleBoolean(true)") === SimpleBoolean(true))
   }
