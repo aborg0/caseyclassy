@@ -15,10 +15,10 @@ before_cache:
 
 language: scala
 jdk:
-  - oraclejdk8
-  - oraclejdk9
+  - openjdk8
+  - openjdk11
 scala:
-  - 2.12.6
+  - 2.13.0
 notifications:
   email: false
 #  webhooks:
