@@ -1,5 +1,7 @@
 package com.github.aborg0.caseyclassy
 
+import fastparse.P
+
 //import shapeless.Lazy
 
 //trait ParseCaseClass {

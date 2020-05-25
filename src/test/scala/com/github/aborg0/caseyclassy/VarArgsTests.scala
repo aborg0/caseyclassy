@@ -1,6 +1,7 @@
 package com.github.aborg0.caseyclassy
 
 import com.github.aborg0.caseyclassy.example.{OnlyVarArgs, StringPlusVarArgs}
+import fastparse._
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 

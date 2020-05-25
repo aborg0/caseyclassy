@@ -3,6 +3,7 @@ package com.github.aborg0.caseyclassy
 import java.time.LocalDate
 
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
+import fastparse._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 

@@ -3,10 +3,12 @@ package com.github.aborg0.caseyclassy
 import java.time.LocalDate
 
 import com.github.aborg0.caseyclassy.example.{SimpleBoolean, SimpleDouble, SimpleInt, SimpleObject}
-import org.scalatest.FlatSpec
+import fastparse._
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class FPMagnoliaSimpleTests extends FlatSpec with TableDrivenPropertyChecks {
+
+class FPMagnoliaSimpleTests extends AnyFlatSpec with TableDrivenPropertyChecks {
   val implementations: TableFor1[FastParseMagnoliaParseCaseClass.type] = Table("implementation", FastParseMagnoliaParseCaseClass)
 
   behavior of "FastParseMagnoliaParseCaseClass for simple cases"

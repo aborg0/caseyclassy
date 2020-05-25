@@ -3,10 +3,11 @@ package com.github.aborg0.caseyclassy
 import java.time.{LocalDate, LocalTime}
 
 import com.github.aborg0.caseyclassy.example.TwoArgsBoolInt
-import org.scalatest.FlatSpec
+import fastparse._
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class FPMagnoliaTwoArgsTests extends FlatSpec with TableDrivenPropertyChecks {
+class FPMagnoliaTwoArgsTests extends AnyFlatSpec with TableDrivenPropertyChecks {
   val implementations: TableFor1[FastParseMagnoliaParseCaseClass.type] = Table("implementation", FastParseMagnoliaParseCaseClass)
   behavior of "FastParseMagnoliaParseCaseClass for two args cases"
   import FastParseMagnoliaParseCaseClass._
