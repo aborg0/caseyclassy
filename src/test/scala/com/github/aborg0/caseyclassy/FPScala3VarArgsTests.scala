@@ -1,14 +1,15 @@
 package com.github.aborg0.caseyclassy
 
 import com.github.aborg0.caseyclassy.example.{OnlyVarArgs, StringPlusVarArgs}
+import com.github.aborg0.caseyclassy.FastParseParse.given
 import fastparse._
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor1, TableFor2}
 
-class FPMagnoliaVarArgsTests extends AnyWordSpec with TableDrivenPropertyChecks {
-  val implementations: TableFor1[FastParseMagnoliaParseCaseClass.type] = Table("implementation", FastParseMagnoliaParseCaseClass)
+class FPScala3VarArgsTests extends AnyWordSpec with TableDrivenPropertyChecks {
+  val implementations: TableFor1[FastParseParse.type] = Table("implementation", FastParseParse)
 
-  import FastParseMagnoliaParseCaseClass._
+  import FastParseParse._
 
   "ParseCaseClass for variable arity arguments successfully parse" when {
     "OnlyVarArgs" should {
