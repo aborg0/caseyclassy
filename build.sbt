@@ -1,6 +1,6 @@
 //import sbtcrossproject.{crossProject, CrossType}
 
-//enablePluginsugins(TutPlugin)
+enablePlugins(MdocPlugin)
 
 //enablePlugins(LaikaPlugin)
 
